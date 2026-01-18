@@ -29,12 +29,35 @@ jobs:
       - name: Build (Prod NoGoogle Debug)
         working-directory: obv_messenger
         run: |
+          set -o pipefail
           chmod +x ./gradlew
-          ./gradlew :app:assembleProdNogoogleDebug --stacktrace
+          if ./gradlew :app:assembleProdNogoogleDebug --stacktrace 2>&1 | tee build.log; then
+            echo "Build OK"
+          else
+            echo "::error::Gradle build failed"
+            echo "::group::Gradle tail (build.log)"
+            tail -n 200 build.log || true
+            echo "::endgroup::"
+            grep -nE "FAILURE:|\\* What went wrong:|\\* Try:|\\* Exception is:|^> Task|^Caused by:" build.log | tail -n 80 | while read -r line; do
+              echo \"::error::$line\"
+            done
+            exit 1
+          fi
 
       - name: Unit tests (Prod NoGoogle Debug)
         working-directory: obv_messenger
         run: |
+          set -o pipefail
           chmod +x ./gradlew
-          ./gradlew :app:testProdNogoogleDebugUnitTest --stacktrace
-
+          if ./gradlew :app:testProdNogoogleDebugUnitTest --stacktrace 2>&1 | tee test.log; then
+            echo "Tests OK"
+          else
+            echo "::error::Gradle tests failed"
+            echo "::group::Gradle tail (test.log)"
+            tail -n 200 test.log || true
+            echo "::endgroup::"
+            grep -nE "FAILURE:|\\* What went wrong:|\\* Try:|\\* Exception is:|^> Task|^Caused by:" test.log | tail -n 80 | while read -r line; do
+              echo \"::error::$line\"
+            done
+            exit 1
+          fi
