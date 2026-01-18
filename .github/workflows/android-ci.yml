@@ -1,0 +1,40 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build (Prod NoGoogle Debug)
+        working-directory: obv_messenger
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:assembleProdNogoogleDebug --stacktrace
+
+      - name: Unit tests (Prod NoGoogle Debug)
+        working-directory: obv_messenger
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:testProdNogoogleDebugUnitTest --stacktrace
+
