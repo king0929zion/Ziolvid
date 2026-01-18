@@ -178,7 +178,7 @@ fun DiscussionListScreen(
         val scope = rememberCoroutineScope()
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
-            containerColor = colorResource(id = R.color.almostWhite),
+            containerColor = colorResource(id = R.color.wechat_background),
             snackbarHost = {
                 SnackbarHost(
                     modifier = Modifier.padding(

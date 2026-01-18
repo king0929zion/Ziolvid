@@ -2126,10 +2126,10 @@
     <string name="label_group_admins">Group administrators</string>
     <string name="text_common_group">\"%1$s\" is a common group</string>
     <string name="onboarding_privacy_disclaimer">To protect your privacy, Olvid has **no public or central user directory**. Your name will only be seen by the people you connect with.</string>
-    <string name="tab_title_discussions">Discussions</string>
-    <string name="tab_title_contacts">Contacts</string>
-    <string name="tab_title_groups">Groups</string>
-    <string name="tab_title_calls">Calls</string>
+    <string name="tab_title_discussions">微信</string>
+    <string name="tab_title_contacts">联系人</string>
+    <string name="tab_title_groups">群聊</string>
+    <string name="tab_title_calls">通话</string>
     <string name="content_description_pinned_discussion">Pinned discussion</string>
     <string name="attachments_files_joiner" translatable="false">" + "</string>
     <string name="attachments_joiner" translatable="false">" - "</string>

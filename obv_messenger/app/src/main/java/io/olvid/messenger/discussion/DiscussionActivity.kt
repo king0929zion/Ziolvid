@@ -234,6 +234,8 @@ import io.olvid.messenger.webrtc.components.CallNotification
 import kotlinx.coroutines.delay
 import java.io.FileInputStream
 import java.io.IOException
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
@@ -447,7 +449,7 @@ class DiscussionActivity : LockableActivity(), OnClickListener, AttachmentLongCl
                 val invitations by discussionViewModel.invitations.observeAsState()
                 LaunchedEffect(Unit) {
                     if (composeAreaBottomPadding == null) {
-                        setComposeAreaBottomPadding(with(density) { 44.dp.toPx() }.toInt())
+                        setComposeAreaBottomPadding(with(density) { 56.dp.toPx() }.toInt())
                     }
                 }
                 LaunchedEffect(invitations) {
@@ -611,6 +613,22 @@ class DiscussionActivity : LockableActivity(), OnClickListener, AttachmentLongCl
                         }
                     }
                 }
+
+                fun formatWeChatTime(timestamp: Long): String {
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = timestamp
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    val period = if (hour < 12) "上午" else "下午"
+                    return String.format(Locale.getDefault(), "%s %02d:%02d", period, hour, minute)
+                }
+
+                fun shouldShowWeChatTimeHeader(timestamp: Long, previousTimestamp: Long?): Boolean {
+                    if (previousTimestamp == null || previousTimestamp <= 0L) {
+                        return true
+                    }
+                    return kotlin.math.abs(timestamp - previousTimestamp) >= 5 * 60 * 1000L
+                }
                 val showScrollDownButton by remember {
                     derivedStateOf {
                         lazyListState.firstVisibleItemIndex > 1
@@ -621,7 +639,7 @@ class DiscussionActivity : LockableActivity(), OnClickListener, AttachmentLongCl
                         lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()
                             ?.takeIf { it.contentType != "DateHeader" }?.key?.run {
                                 messages.itemSnapshotList.items.find { it.id == this }?.timestamp?.let {
-                                    StringUtils.getDayOfDateString(context, it)
+                                    formatWeChatTime(it)
                                 }
                             }
                     }
@@ -656,7 +674,7 @@ class DiscussionActivity : LockableActivity(), OnClickListener, AttachmentLongCl
                                 }
                             }
                         }
-                        .background(color = colorResource(id = R.color.almostWhite))
+                        .background(color = colorResource(id = R.color.wechat_chat_background))
                 ) {
                     // discussion custom background
                     // TODO get rid of rootBackgroundImageView wrapper
@@ -989,21 +1007,17 @@ class DiscussionActivity : LockableActivity(), OnClickListener, AttachmentLongCl
                                                 saveAllAttachments = { saveAllAttachments() },
                                             )
                                         }
-                                        // date header
-                                        if (Utils.notTheSameDay(
+                                        // time header (WeChat-style): show only if gap >= 5 minutes
+                                        val previousTimestamp =
+                                            messages.itemSnapshotList.getOrNull(index + 1)?.timestamp
+                                        if (shouldShowWeChatTimeHeader(
                                                 message.timestamp,
-                                                messages.itemSnapshotList.getOrNull(
-                                                    index + 1
-                                                )?.timestamp ?: 0
+                                                previousTimestamp
                                             )
                                         ) {
-                                            val date = StringUtils.getDayOfDateString(
-                                                context,
-                                                message.timestamp
-                                            ).toString()
                                             DateHeader(
                                                 modifier = Modifier.animateItem(),
-                                                date = date
+                                                date = formatWeChatTime(message.timestamp)
                                             )
                                         }
                                     }

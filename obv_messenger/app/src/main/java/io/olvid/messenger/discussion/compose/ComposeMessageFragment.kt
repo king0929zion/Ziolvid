@@ -58,7 +58,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
@@ -109,6 +108,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.android.material.button.MaterialButton
 import io.olvid.engine.Logger
 import io.olvid.engine.engine.types.JsonIdentityDetails
 import io.olvid.messenger.App
@@ -212,7 +212,7 @@ class ComposeMessageFragment : Fragment(R.layout.fragment_discussion_compose), O
     var discussionDelegate: DiscussionDelegate? = null
     private var voiceMessageRecorder: VoiceMessageRecorder? = null
     private var newMessageEditText: DiscussionInputEditText? = null
-    private var sendButton: ImageButton? = null
+    private var sendButton: MaterialButton? = null
     private var hasCamera = false
     private var animateLayoutChanges = false
     private var attachStuffPlus: ImageView? = null
@@ -1840,21 +1840,7 @@ class ComposeMessageFragment : Fragment(R.layout.fragment_discussion_compose), O
             sendButton?.isGone = true
             directAttachVoiceMessageImageView?.isVisible = true
         } else {
-            if (isEditMode()) {
-                sendButton?.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        requireContext().resources, R.drawable.ic_send_edit, null
-                    )
-                )
-            } else {
-                sendButton?.setImageDrawable(
-                    context?.resources?.let {
-                        ResourcesCompat.getDrawable(
-                            it, R.drawable.ic_send, null
-                        )
-                    }
-                )
-            }
+            sendButton?.setText(R.string.button_label_send)
             sendButton?.isVisible = true
             directAttachVoiceMessageImageView?.isGone = true
             sendButton?.isEnabled =

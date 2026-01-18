@@ -144,8 +144,8 @@ fun ContactListItem(
                 // Title
                 Text(
                     text = title,
-                    color = colorResource(id = R.color.primary700),
-                    style = OlvidTypography.h3,
+                    color = colorResource(id = R.color.wechat_text_main),
+                    style = OlvidTypography.h2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -153,8 +153,8 @@ fun ContactListItem(
                 body?.let {
                     Text(
                         text = body,
-                        color = colorResource(id = R.color.greyTint),
-                        style = OlvidTypography.subtitle1,
+                        color = colorResource(id = R.color.wechat_text_sub),
+                        style = OlvidTypography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )

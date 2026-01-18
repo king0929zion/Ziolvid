@@ -64,4 +64,22 @@
     <color name="poll9">#6C3C00</color>
     <color name="poll10">#A85151</color>
     <color name="poll11">#85785C</color>
+
+    <!-- WeChat UI Theme Colors -->
+    <color name="wechat_primary">#07C160</color>
+    <color name="wechat_primary_dark">#06AD56</color>
+    <color name="wechat_sent_bubble">#95EC69</color>
+    <color name="wechat_received_bubble">#FFFFFF</color>
+    <color name="wechat_background">#FFFFFF</color>
+    <color name="wechat_background_secondary">#F2F2F2</color>
+    <color name="wechat_fill">#F7F7F7</color>
+    <color name="wechat_line">#E5E6EB</color>
+    <color name="wechat_text_main">#1D2129</color>
+    <color name="wechat_text_sub">#86909C</color>
+    <color name="wechat_text_weak">#A0A0A0</color>
+    <color name="wechat_danger">#FB6E77</color>
+    <color name="wechat_online">#23C343</color>
+    <color name="wechat_tab_bar_background">#F7F7F7</color>
+    <color name="wechat_chat_background">#EDEDED</color>
+    <color name="wechat_chat_header_background">#EDEDED</color>
 </resources>

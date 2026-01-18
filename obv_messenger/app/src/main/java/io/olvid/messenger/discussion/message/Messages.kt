@@ -83,6 +83,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
@@ -209,7 +210,7 @@ fun ScrollDownButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     IconButton(
         modifier = modifier
             .background(
-                color = colorResource(id = R.color.olvid_gradient_light),
+                color = colorResource(id = R.color.wechat_primary),
                 shape = CircleShape
             )
             .requiredSize(40.dp),
@@ -242,15 +243,11 @@ fun DateHeader(
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier
-                .background(
-                    color = colorResource(id = R.color.primary400_90),
-                    shape = CircleShape
-                )
-                .padding(vertical = 4.dp, horizontal = 8.dp),
+            modifier = Modifier.padding(vertical = 4.dp),
             textAlign = TextAlign.Center,
             text = date,
-            color = Color.White
+            fontSize = 13.sp,
+            color = Color(0xFFB2B2B2)
         )
     }
 }
@@ -340,7 +337,7 @@ fun Message(
                 if (showSender) {
                     if (lastFromSender) {
                         InitialView(
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier.size(40.dp),
                             initialViewSetup = { it.setFromCache(message.senderIdentifier) }
                         ) {
                             if (blockClicks) {
@@ -372,7 +369,7 @@ fun Message(
                             }
                         }
                     } else {
-                        Spacer(modifier = Modifier.width(32.dp))
+                        Spacer(modifier = Modifier.width(40.dp))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
@@ -397,22 +394,24 @@ fun Message(
                 ) {
                     val interactionSource = remember { MutableInteractionSource() }
 
-                    MessageInnerStack(
+                    val isWeChatBubble =
+                        message.messageType == Message.TYPE_OUTBOUND_MESSAGE ||
+                            message.messageType == Message.TYPE_INBOUND_MESSAGE ||
+                            message.messageType == Message.TYPE_INBOUND_EPHEMERAL_MESSAGE
+                    val bubbleShape = RoundedCornerShape(4.dp)
+                    val bubbleColor = when {
+                        !isWeChatBubble -> Color.Transparent
+                        message.isInbound -> colorResource(id = R.color.wechat_received_bubble)
+                        else -> colorResource(id = R.color.wechat_sent_bubble)
+                    }
+
+                    Box(
                         modifier = Modifier
                             .then(
                                 onMessageGloballyPositioned?.let {
                                     Modifier.onGloballyPositioned(it)
                                 } ?: Modifier
                             )
-                            .background(
-                                color = if (message.isInbound) colorResource(id = R.color.lighterGrey)
-                                else if (message.messageType == Message.TYPE_OUTBOUND_MESSAGE) colorResource(
-                                    id = R.color.primary100
-                                )
-                                else Color.Transparent,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .clip(RoundedCornerShape(8.dp))
                             .combinedClickable(
                                 interactionSource = interactionSource,
                                 indication = ripple(),
@@ -435,29 +434,61 @@ fun Message(
                                     else -> Modifier
                                         .fillMaxWidth()
                                         .widthIn(max = maxWidth)
-                                        .padding(2.dp)
-                                        .background(
-                                            color = colorResource(id = R.color.almostWhite),
-                                            shape = RoundedCornerShape(8.dp)
-                                        )
-                                        .border(
-                                            width = 1.dp,
-                                            color = colorResource(
-                                                id = if (message.messageType == Message.TYPE_SCREEN_SHOT_DETECTED) R.color.red else R.color.primary400_90
-                                            ),
-                                            shape = RoundedCornerShape(8.dp)
-                                        )
                                 }
                             )
-                            .then(
-                                if (message.isPollMessage) {
-                                    Modifier.padding(top = 6.dp, start = 6.dp, end = 6.dp)
-                                } else {
-                                    Modifier.padding(6.dp)
-                                }
-                            ),
-                        noAutoWidth = message.hasAttachments() || message.isLocationMessage || message.isPollMessage
                     ) {
+                        if (isWeChatBubble) {
+                            Box(
+                                modifier = Modifier
+                                    .align(if (message.isInbound) Alignment.TopStart else Alignment.TopEnd)
+                                    .offset(
+                                        x = if (message.isInbound) (-4).dp else 4.dp,
+                                        y = 12.dp
+                                    )
+                                    .size(8.dp)
+                                    .graphicsLayer { rotationZ = 45f }
+                                    .background(color = bubbleColor)
+                            )
+                        }
+
+                        MessageInnerStack(
+                            modifier = Modifier
+                                .then(
+                                    if (isWeChatBubble) {
+                                        Modifier
+                                            .background(color = bubbleColor, shape = bubbleShape)
+                                            .clip(bubbleShape)
+                                            .heightIn(min = 40.dp)
+                                    } else {
+                                        Modifier
+                                            .padding(2.dp)
+                                            .background(
+                                                color = colorResource(id = R.color.almostWhite),
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                            .border(
+                                                width = 1.dp,
+                                                color = colorResource(
+                                                    id = if (message.messageType == Message.TYPE_SCREEN_SHOT_DETECTED) R.color.red else R.color.primary400_90
+                                                ),
+                                                shape = RoundedCornerShape(8.dp)
+                                            )
+                                    }
+                                )
+                                .then(
+                                    if (message.isPollMessage) {
+                                        Modifier.padding(
+                                            top = 8.dp,
+                                            start = 10.dp,
+                                            end = 10.dp,
+                                            bottom = 8.dp
+                                        )
+                                    } else {
+                                        Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
+                                    }
+                                ),
+                            noAutoWidth = message.hasAttachments() || message.isLocationMessage || message.isPollMessage
+                        ) {
 
                         // Sender
                         if (showSender && lastFromSender) {
@@ -467,16 +498,10 @@ fun Message(
                                         id = R.string.text_deleted_contact
                                     )
                             Text(
-                                modifier = Modifier.padding(bottom = 2.dp),
+                                modifier = Modifier.padding(bottom = 2.dp, start = 4.dp),
                                 text = displayName,
-                                style = OlvidTypography.h3,
-                                color = Color(
-                                    InitialView.getTextColor(
-                                        context,
-                                        message.senderIdentifier,
-                                        ContactCacheSingleton.getContactCustomHue(message.senderIdentifier)
-                                    )
-                                )
+                                fontSize = 11.sp,
+                                color = colorResource(id = R.color.wechat_text_sub),
                             )
                         }
 
@@ -1033,9 +1058,7 @@ fun MessageBody(
         }
         Text(
             text = text,
-            color = if (message.isInbound) colorResource(id = R.color.inboundMessageBody) else colorResource(
-                id = R.color.primary700
-            ),
+            color = colorResource(id = R.color.wechat_text_main),
             style = if (message.isInbound || message.messageType == Message.TYPE_OUTBOUND_MESSAGE) OlvidTypography.body1.copy(
                 fontSize = (16 * scale).sp,
                 lineHeight = (16 * scale).sp
@@ -1371,9 +1394,7 @@ fun MessageBody(
                             textAlign = if (message.isInbound || message.messageType == Message.TYPE_OUTBOUND_MESSAGE) textAlign else TextAlign.Center,
                             onTextLayout = { layoutResult = it },
                             overflow = TextOverflow.Visible,
-                            color = if (message.isInbound) colorResource(id = R.color.inboundMessageBody) else colorResource(
-                                id = R.color.primary700
-                            ),
+                            color = colorResource(id = R.color.wechat_text_main),
                             style = if (message.isInbound || message.messageType == Message.TYPE_OUTBOUND_MESSAGE) OlvidTypography.body1.copy(
                                 fontSize = textSize,
                                 lineHeight = 1.1.em

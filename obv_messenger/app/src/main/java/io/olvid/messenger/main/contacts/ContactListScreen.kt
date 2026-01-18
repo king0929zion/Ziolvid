@@ -555,8 +555,8 @@ private fun Header(
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage.coerceAtMost(pages.size - 1),
-        backgroundColor = colorResource(id = R.color.almostWhite),
-        contentColor = colorResource(id = R.color.almostBlack),
+        backgroundColor = colorResource(id = R.color.wechat_background),
+        contentColor = colorResource(id = R.color.wechat_text_main),
     ) {
         pages.forEachIndexed { index, page ->
             val filter = filters[page]!!
@@ -632,7 +632,7 @@ private fun Contact(
     endContent: (@Composable () -> Unit)? = null
 ) {
     ContactListItem(
-        modifier = Modifier.background(colorResource(id = R.color.almostWhite)),
+        modifier = Modifier.background(colorResource(id = R.color.wechat_background)),
         padding = PaddingValues(horizontal = 8.dp),
         title = contactOrKeycloakDetails.getAnnotatedName()
             .highlight(
@@ -706,7 +706,7 @@ private fun KeycloakSearching() {
             .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(color = colorResource(id = R.color.olvid_gradient_light))
+        CircularProgressIndicator(color = colorResource(id = R.color.wechat_primary))
         Text(
             text = stringResource(id = R.string.label_searching_company_directory),
             textAlign = TextAlign.Center,

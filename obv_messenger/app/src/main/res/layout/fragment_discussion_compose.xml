@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="-4dp"
-        android:background="@color/whiteOverlay"
+        android:background="@color/wechat_fill"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,10 +29,9 @@
         android:id="@+id/compose_message_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="4dp"
-        app:cardBackgroundColor="@color/lighterGrey"
-        app:cardCornerRadius="12dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/wechat_fill"
+        app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/end_spacer"
@@ -254,7 +253,7 @@
                 app:barrierDirection="top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="compose_message_edit_text, owned_identity_initial_view, compose_message_send_button"/>
+                app:constraint_referenced_ids="compose_message_edit_text, compose_message_send_button"/>
 
 
 
@@ -264,6 +263,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginBottom="6dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/compose_message_edit_text"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -272,17 +272,20 @@
                 android:id="@+id/compose_message_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="82dp"
                 android:hint="@string/hint_compose_your_message"
                 android:imeOptions="actionSend"
                 android:ellipsize="end"
                 android:inputType="textCapSentences|textMultiLine|textLongMessage"
                 android:maxLines="6"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="8dp"
+                android:minHeight="38dp"
+                android:maxHeight="120dp"
+                android:background="@drawable/background_wechat_chat_input"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:focusable="true"
                 android:selectAllOnFocus="false"
                 android:scrollbars="vertical"
@@ -290,7 +293,7 @@
                 app:layout_goneMarginBottom="0dp"
                 app:layout_constraintBottom_toTopOf="@id/attachments_recycler_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/owned_identity_initial_view" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/voice_recorder"
@@ -299,23 +302,25 @@
                 app:layout_constraintBottom_toBottomOf="@id/attachments_recycler_view"/>
 
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/compose_message_send_button"
-                android:layout_width="32dp"
-                android:layout_height="36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:minWidth="60dp"
+                android:background="@drawable/background_wechat_send_button"
                 android:clickable="true"
                 android:contentDescription="@string/content_description_send_message"
                 android:focusable="true"
-                android:paddingStart="2dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="7dp"
-                android:theme="@style/SubtleBlueRipple"
-                app:tint="@color/accent_tint_list"
+                android:text="@string/button_label_send"
+                android:textAllCaps="false"
+                android:textColor="@color/alwaysWhite"
+                android:textSize="15sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:stateListAnimator="@null"
+                app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="@id/compose_message_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_send" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/direct_attach_voice_message_button"
@@ -357,11 +362,11 @@
 
     <ImageView
         android:id="@+id/attach_stuff_plus"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:padding="3dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:padding="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="14dp"
         android:background="@drawable/background_circular_ripple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/start_spacer"
@@ -382,11 +387,11 @@
     <LinearLayout
         android:id="@+id/attach_icons_group"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="28dp"
         app:layout_constrainedWidth="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="14dp"
         android:clipChildren="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/attach_stuff_plus"/>

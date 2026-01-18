@@ -182,8 +182,8 @@ fun DiscussionListItem(
                     Text(
                         modifier = Modifier.weight(1f, true),
                         text = title,
-                        color = colorResource(id = R.color.almostBlack),
-                        style = OlvidTypography.h3,
+                        color = colorResource(id = R.color.wechat_text_main),
+                        style = OlvidTypography.h2,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -289,8 +289,8 @@ fun DiscussionListItem(
                             } ?: body
                             Text(
                                 text = statusAndBody,
-                                color = colorResource(id = R.color.greyTint),
-                                style = OlvidTypography.body2,
+                                color = colorResource(id = R.color.wechat_text_sub),
+                                style = OlvidTypography.bodyMedium,
                                 maxLines = if (attachmentCount > 0) 1 else 2,
                                 overflow = TextOverflow.Ellipsis,
                                 inlineContent = inlineMap,
@@ -332,8 +332,8 @@ fun DiscussionListItem(
                         Text(
                             modifier = Modifier.align(Alignment.Bottom),
                             text = date,
-                            color = colorResource(id = R.color.grey),
-                            style = OlvidTypography.subtitle1,
+                            color = colorResource(id = R.color.wechat_text_sub),
+                            style = OlvidTypography.bodySmall,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -505,8 +505,8 @@ fun LastMessageAttachments(
     }
     Text(
         text = text,
-        color = colorResource(id = R.color.greyTint),
-        style = OlvidTypography.body2,
+        color = colorResource(id = R.color.wechat_text_sub),
+        style = OlvidTypography.bodyMedium,
         maxLines = if (useTwoLines) 2 else 1,
         overflow = TextOverflow.Ellipsis,
         inlineContent = localInlineMap,

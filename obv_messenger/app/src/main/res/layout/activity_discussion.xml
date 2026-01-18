@@ -5,7 +5,7 @@
     android:id="@+id/root_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/almostWhite">
+    android:background="@color/wechat_chat_background">
 
     <View
         android:id="@+id/spacer"
@@ -40,8 +40,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/discussion_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:layout_height="44dp"
+        android:background="@color/wechat_chat_header_background"
         android:theme="@style/AppTheme.LightAppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
         app:popupTheme="@style/AppTheme"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
-        android:elevation="8dp"
+        android:elevation="0dp"
         android:clickable="true"
         android:focusable="true">
 
@@ -85,6 +85,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/back_button"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -93,20 +94,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintWidth_max="wrap"
-                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_bias="0.5"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAppearance="@style/RobotoMedium"
                 android:textColor="@color/almostBlack"
-                android:textSize="@dimen/title_font_size"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:gravity="center"
                 tools:text="Discussion title"
                 tools:ignore="SpUsage"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginEnd="56dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/title_bar_subtitle"
-                app:layout_constraintStart_toEndOf="@+id/title_bar_initial_view"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
             <TextView
                 android:id="@+id/title_bar_subtitle"
